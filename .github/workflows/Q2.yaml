@@ -1,0 +1,41 @@
+name: Q2 Workflow
+
+on:
+  push:
+    paths:
+      - README.md
+  workflow_dispatch: # Permet de déclencher manuellement le workflow
+
+jobs:
+  create_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Get current date and time
+      id: datetime
+      run: echo "::set-output name=datetime::$(date '+%Y-%m-%d %H:%M:%S')"
+
+    - name: Create Q2_archive_README.md
+      run: |
+        echo "Nom: Pois--Bons" > Q2_archive_README.md
+        echo "Prénom: Alexandre" >> Q2_archive_README.md
+        echo "Date et Heure: ${{ steps.datetime.outputs.datetime }}" >> Q2_archive_README.md
+        echo "" >> Q2_archive_README.md
+        echo "Contenu de README.md :" >> Q2_archive_README.md
+        cat README.md >> Q2_archive_README.md
+
+    - name: Configure git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit and push changes
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git add Q2_archive_README.md
+        git commit -m "Add Q2_archive_README.md with workflow details"
+        git push
