@@ -3,8 +3,8 @@ name: Q4 Workflow
 on:
   push:
     paths:
-      - Q4.java
-  workflow_dispatch: # Permet d'exécuter le workflow manuellement
+      - Q4.java  # Déclenchement du workflow lors d'un changement dans le fichier Q4.java
+  workflow_dispatch:  # Permet d'exécuter le workflow manuellement
 
 jobs:
   create_and_push:
@@ -14,20 +14,21 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Get current date
+      id: get_date
+      run: |
+        current_date=$(date '+%d-%m-%Y')  # Format de la date JJ-MM-AAAA
+        echo "La date actuelle est : ${current_date}"
+        echo "current_date=${current_date}" >> $GITHUB_ENV  # Sauvegarde la date dans l'environnement
+
     - name: Create Q4_archive_date.txt
       run: |
-        # Obtenez la date actuelle au format JJ-MM-AAAA
-        current_date=$(date '+%d-%m-%Y')
-        
-        # Vérifiez la date générée pour éviter toute erreur de format
-        echo "La date actuelle est : ${current_date}"
-        
-        # Créez le fichier d'archive avec le bon nom incluant la date
-        echo "Nom: Pois--Bons" > Q4_archive_${current_date}.txt
-        echo "Prénom: Alexandre" >> Q4_archive_${current_date}.txt
-        echo "" >> Q4_archive_${current_date}.txt
-        echo "Contenu de Q4.java :" >> Q4_archive_${current_date}.txt
-        cat Q4.java >> Q4_archive_${current_date}.txt
+        # Utiliser la variable `current_date` dans le nom du fichier
+        echo "Nom: Pois--Bons" > Q4_archive_${{ env.current_date }}.txt
+        echo "Prénom: Alexandre" >> Q4_archive_${{ env.current_date }}.txt
+        echo "" >> Q4_archive_${{ env.current_date }}.txt
+        echo "Contenu de Q4.java :" >> Q4_archive_${{ env.current_date }}.txt
+        cat Q4.java >> Q4_archive_${{ env.current_date }}.txt
 
     - name: Configure git
       run: |
@@ -39,6 +40,6 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git pull --rebase origin main  # Récupère les modifications distantes
-        git add Q4_archive_${current_date}.txt  # Assurez-vous que c'est bien le bon fichier
-        git commit -m "Add Q4_archive_${current_date}.txt with Q4.java content"
+        git add Q4_archive_${{ env.current_date }}.txt  # Ajoute le fichier généré avec la date correcte
+        git commit -m "Add Q4_archive_${{ env.current_date }}.txt with Q4.java content"
         git push origin main
