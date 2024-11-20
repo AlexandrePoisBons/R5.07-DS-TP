@@ -16,13 +16,14 @@ jobs:
 
     - name: Get current date and time
       id: datetime
-      run: echo "::set-output name=datetime::$(date '+%Y-%m-%d %H:%M:%S')"
+      run: |
+        echo "datetime=$(date '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
 
     - name: Create Q2_archive_README.md
       run: |
         echo "Nom: Pois--Bons" > Q2_archive_README.md
         echo "Prénom: Alexandre" >> Q2_archive_README.md
-        echo "Date et Heure: ${{ steps.datetime.outputs.datetime }}" >> Q2_archive_README.md
+        echo "Date et Heure: ${{ env.datetime }}" >> Q2_archive_README.md
         echo "" >> Q2_archive_README.md
         echo "Contenu de README.md :" >> Q2_archive_README.md
         cat README.md >> Q2_archive_README.md
