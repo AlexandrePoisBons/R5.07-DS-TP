@@ -1,0 +1,38 @@
+name: Q3 Workflow
+
+on:
+  push:
+    paths:
+      - Q3.java
+  workflow_dispatch: # Permet d'exécuter le workflow manuellement
+
+jobs:
+  create_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Create Q3_archive_java.txt
+      run: |
+        echo "Nom: Pois--Bons" > Q3_archive_java.txt
+        echo "Prénom: Alexandre" >> Q3_archive_java.txt
+        echo "" >> Q3_archive_java.txt
+        echo "Contenu de Q3.java :" >> Q3_archive_java.txt
+        cat Q3.java >> Q3_archive_java.txt
+
+    - name: Configure git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit and push Q3_archive_java.txt
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git pull --rebase origin main  # Récupère les modifications distantes
+        git add Q3_archive_java.txt
+        git commit -m "Add Q3_archive_java.txt with Q3.java content"
+        git push origin main
+git add .github/workflows/Q3.yaml
