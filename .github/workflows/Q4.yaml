@@ -19,7 +19,10 @@ jobs:
         # Obtenez la date actuelle au format JJ-MM-AAAA
         current_date=$(date '+%d-%m-%Y')
         
-        # Créez le fichier d'archive
+        # Vérifiez que la variable current_date est bien définie
+        echo "La date actuelle est : ${current_date}"
+        
+        # Créez le fichier d'archive avec le nom comprenant la date
         echo "Nom: Pois--Bons" > Q4_archive_${current_date}.txt
         echo "Prénom: Alexandre" >> Q4_archive_${current_date}.txt
         echo "" >> Q4_archive_${current_date}.txt
@@ -36,6 +39,6 @@ jobs:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git pull --rebase origin main  # Récupère les modifications distantes
-        git add Q4_archive_${current_date}.txt
+        git add Q4_archive_${current_date}.txt  # Assurez-vous que c'est bien le bon fichier
         git commit -m "Add Q4_archive_${current_date}.txt with Q4.java content"
         git push origin main
