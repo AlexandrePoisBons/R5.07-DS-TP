@@ -19,10 +19,10 @@ jobs:
         # Obtenez la date actuelle au format JJ-MM-AAAA
         current_date=$(date '+%d-%m-%Y')
         
-        # Vérifiez que la variable current_date est bien définie
+        # Vérifiez la date générée pour éviter toute erreur de format
         echo "La date actuelle est : ${current_date}"
         
-        # Créez le fichier d'archive avec le nom comprenant la date
+        # Créez le fichier d'archive avec le bon nom incluant la date
         echo "Nom: Pois--Bons" > Q4_archive_${current_date}.txt
         echo "Prénom: Alexandre" >> Q4_archive_${current_date}.txt
         echo "" >> Q4_archive_${current_date}.txt
